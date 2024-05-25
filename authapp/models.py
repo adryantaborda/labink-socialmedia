@@ -10,9 +10,9 @@ class User(AbstractUser):
     
     username = models.CharField(max_length=20,unique=True)
     email = models.EmailField()
-    password = models.CharField(max_length=50)
-    gender = models.CharField(max_length=6,choices=genders.choices,default=None)
-    birthday = models.DateField()
+    password = models.CharField(max_length=200)
+    gender = models.CharField(max_length=6,choices=genders.choices,default=None,null=True)
+    birthday = models.DateField(null=True)
 
     def clean(self):
         super().clean()
