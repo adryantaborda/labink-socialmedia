@@ -12,4 +12,3 @@ def loginUser(request):
         name = requests.POST.get('name')
         password = requests.POST.get('password')
 
-
