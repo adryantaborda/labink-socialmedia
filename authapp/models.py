@@ -14,15 +14,16 @@ class User(AbstractUser):
     gender = models.CharField(max_length=6,choices=genders.choices,default=None,null=True)
     birthday = models.DateField(null=True)
 
-    def clean(self):
-        super().clean()
-        self.verify_gender()
+    # def handle_gender(self):
+    #     User.gender.upper()
 
+    # def clean(self):
+    #     super().clean()
+    #     self.verify_gender()
 
-    def verify_gender():
-
-        if User.gender not in User.genders:
-            raise ValidationError("Invalid gender choice. Must be 'MALE' or 'FEMALE'")
-        return User.gender
+    # def verify_gender(self):
+    #     if User.gender not in User.genders:
+    #         raise ValidationError("Invalid gender choice. Must be 'MALE' or 'FEMALE'")
+    #     return User.gender
         
     USERNAME_FIELD = 'username'
