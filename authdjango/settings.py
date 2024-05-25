@@ -75,9 +75,13 @@ WSGI_APPLICATION = 'authdjango.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'userdb',
+        'USER': 'postgres',
+        'PASSWORD': '***REMOVED***',
+        'HOST': 'localhost',     # Replace with your PostgreSQL server's address if necessary
+        'PORT': '5432',          # Leave empty to use the default PostgreSQL port (usually 5432)
     }
 }
 
