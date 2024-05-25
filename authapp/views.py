@@ -11,8 +11,7 @@ import requests
 def home(request):
     if request.user.is_authenticated == False:
         return redirect('login')
-    return render(request,'home.html')
-        
+    return render(request,'home.html')      
 
 def loginUser(request):
     page = 'login'
@@ -22,7 +21,6 @@ def loginUser(request):
         
         try:
             user = User.objects.get(username=username)
-             
         except:
             messages.error(request,"Couldn't create your account")
 
@@ -32,5 +30,25 @@ def loginUser(request):
             login(request,user)
         
     return render(request,'loginpage.html',{'page':page})
+
+def createrUser(request):
+    form = MyUserCreationForm()
+    if request.method == 'POST':
+        form = MyUserCreationForm(request.POST)
+        
+        if form.is_valid():
+            try:
+                user = form.save(commit=False)
+                user.save()
+                messages.success(request,'Congratulations! Your account was created!')
+                messages.success(request,'Please login')
+                return redirect('home')
+            except:
+                messages.error(request,"Couldn't create your account")
+
+    context = {'form':form}    
+
+    return render(request,'signuppage.html',context)
+        
 
 

@@ -9,15 +9,10 @@
 {% endif %}
 
 <div>
-    <form method="POST" action="">
+    <form method="post">
         {% csrf_token %}
-        <input type="text" name="username" placeholder="Enter your username">
-        <input type="text" name="password" placeholder="Enter your password">
+        {{ form.as_p }}
         <input type="submit" value="Register" />
     </form>
-    
-    <p>Already signed up?</p>
-    
 </div>
-
 {% endblock content %}
