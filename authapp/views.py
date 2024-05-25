@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.http import HttpResponse
@@ -10,21 +10,27 @@ import requests
 
 def home(request):
     if request.user.is_authenticated == False:
-        return render(request,'home.html')
+        return redirect('login')
+    return render(request,'home.html')
+        
 
 def loginUser(request):
-    
+    page = 'login'
     if request.method == 'POST':
-        username = requests.POST.get('username')
-        password = requests.POST.get('password')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
         try:
-            user = authenticate(username=username,password=password)
-            user.save()
+            user = User.objects.get(username=username)
+             
         except:
             messages.error(request,"Couldn't create your account")
 
-    login(user)
+        authenticate(request,username=username,password=password)
 
-    return render(request,'loginpage.html')
+        if user is not None:
+            login(request,user)
+        
+    return render(request,'loginpage.html',{'page':page})
 
 
