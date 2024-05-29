@@ -1,9 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractBaseUser, UserManager
+
 from django.core.exceptions import ValidationError
 # Create your models here.
 
-class User(AbstractUser):
+class User(AbstractBaseUser):
     class genders(models.TextChoices):
         MALE = 'MALE'
         FEMALE = 'FEMALE'
@@ -13,6 +14,8 @@ class User(AbstractUser):
     password = models.CharField(max_length=200)
     gender = models.CharField(max_length=6,choices=genders.choices,default=None,null=True)
     birthday = models.DateField(null=True)
+
+    objects = UserManager()
 
     # def handle_gender(self):
     #     User.gender.upper()

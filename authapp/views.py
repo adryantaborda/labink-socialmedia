@@ -51,4 +51,10 @@ def createrUser(request):
     return render(request,'signuppage.html',context)
         
 
-
+def logoutUser(request):
+    if request.user.is_authenticated == False:
+        return redirect('home')
+    
+    logout(request)
+    return redirect('login')
+    
