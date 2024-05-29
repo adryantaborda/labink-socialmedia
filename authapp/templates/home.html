@@ -1,3 +1,7 @@
 {% block content %}
 
+<h1>{{ user.username }}: Logged in.</h1>
+
+<a href="{% url 'logout'%}">LOGOUT</a>
+
 {% endblock content %}

@@ -1,0 +1,15 @@
+criando api view pra criar usuario
+
+usar api view post
+def função request
+se requestmethod for post
+data = request.data
+try:
+UserRegisterSerializer.create(data)   
+except:
+return response (Usuario ja existe)
+
+return Response(serializer.data)
+
+
+
