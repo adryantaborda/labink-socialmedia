@@ -46,7 +46,7 @@ def postUser(request):
         data = request.data
         
         if User.objects.filter(username=data.get('username')).exists():
-            return Response({"ERROR":"User already exists."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"Error":"User already exists."}, status=status.HTTP_400_BAD_REQUEST)
             
         serializer = UserRegisterSerializer(data=data)
         if serializer.is_valid():
@@ -57,35 +57,26 @@ def postUser(request):
 @api_view(['POST'])
 def loginUser(request):
     data = request.data
-    serializer = UserLoginSerializer(data=data)
+    serializer = UserLoginSerializer(data=data, context={'request':request})
 
     if serializer.is_valid():
-        
         serializer.perform_login()
         return Response({"Success:", "User logged succesfully"},status=status.HTTP_200_OK)
     else:
-        print(serializer.is_valid())
-        return Response({"ERROR":"NO PERMISSION."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"Error":"Please, check your credentials."}, status=status.HTTP_400_BAD_REQUEST)
 
-
-# PANI NO SISTEMA UIIIIIIIIIIIIIIIIIIIIIIIUUUUUUUUUUUU
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def deleteUser(request,format=None):
     user = request.user
     data = request.data
-    print(user)
-    print(data)
 
     serializer = UserDeleteAccountSerializer(data=data)
     if serializer.is_valid():
-            if user.username == request.validated_data['username']:
+            if user.username == serializer.validated_data['username']:
                 serializer.perform_delete()
                 return Response({"Success:", "User deleted succesfully"},status=status.HTTP_200_OK)
             else:
-                return Response({"ERROR":"NO PERMISSION."}, status=status.HTTP_400_BAD_REQUEST)
-            
-    
-    print("WRONG SERIALIZER") 
-    print(serializer.is_valid())       
+                return Response({"Error":"This is not your account. You are not allowed to delete user."}, status=status.HTTP_400_BAD_REQUEST)
+                
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
