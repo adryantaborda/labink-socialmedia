@@ -34,33 +34,43 @@ class UserLoginSerializer(serializers.ModelSerializer):
         fields = ['username','password']
 
     def validate(self,validated_data):
-        user = authenticate(username=validated_data['username'],password=validated_data['password'])
-        if not user:
+        username = validated_data.get('username')
+        password = validated_data.get('password')
+        user = authenticate(username=username,password=password)
+
+        if user is None:
             raise ValidationError("user doesn't exist.")
+        
+        elif not user.is_active:
+            raise ValidationError("user isn't active.")
+        
         validated_data['user'] = user
+
         return validated_data
+    
     def perform_login(self):
         user = self.validated_data['user']
-        print(user)
-        login(user)
+        print(f"Logging in user: {user}")
+        login(self.context['request'], user)
 
-# PANI NO SISTEMA UIIIIIIIIIIIIIIIIIIIIIIIUUUUUUUUUUUU
 class UserDeleteAccountSerializer(serializers.ModelSerializer):
     username = serializers.CharField()
     password = serializers.CharField(write_only=True)
     class Meta:
         model = User
         fields = ['username','password']
-        
+    
     def validate(self, validated_data):
-        user = authenticate(username = validated_data['username'], password = validated_data['password'])
+        username = validated_data.get('username')
+        password = validated_data.get('password')
+        user = authenticate(username = username, password = password)
         if not user:
-            print(validated_data['username'])
-            print(validated_data['password'])
+            print("Invalid credentials:", username)
             raise ValidationError("Invalid credentials.")
         if not user.is_active:
-            print("User is inactive:", validated_data['username'])
+            print("User is inactive:", username)
             raise ValidationError("User account is inactive.")  
+        
         validated_data['user'] = user
         return validated_data
     
@@ -69,4 +79,5 @@ class UserDeleteAccountSerializer(serializers.ModelSerializer):
         user = self.validated_data['user']
         print(user)
         user.delete()
+        
         
