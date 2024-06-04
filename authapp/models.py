@@ -9,6 +9,9 @@ class User(AbstractUser):
         FEMALE = 'FEMALE'
     
     username = models.CharField(max_length=20,unique=True)
+    bio = models.CharField(null=True, max_length=140)
+    avatar = models.ImageField(null=True, upload_to='static/images/icons/',default='static/images/icons/avatar.svg')
+
     email = models.EmailField()
     password = models.CharField(max_length=200)
     gender = models.CharField(max_length=6,choices=genders.choices,default=None,null=True)
