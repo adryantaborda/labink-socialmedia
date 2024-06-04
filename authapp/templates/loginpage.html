@@ -1,22 +1,16 @@
-{% block content %}
+{% include 'messages.html' %}
 
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
-    {% endfor %}
-</ul>
-{% endif %}
+{% block content %}
 
 <div>
     <form method="POST" action="">
         {% csrf_token %}
         <input type="text" name="username" placeholder="Enter your username">
         <input type="text" name="password" placeholder="Enter your password">
-        <input type="submit" value="Register" />
+        <input type="submit" value="Start session" />
     </form>
     
-    <p>Already signed up?</p>
+    <a href="{% url 'signup' %}">Hey! I don't have an account yet!</a>
     
 </div>
 
