@@ -1,8 +1,19 @@
+{% load static%}
+
 {% include 'messages.html' %}
 
 {% block content %}
 
-<h1>{{ user.username }}: Logged in.</h1>
+<style>
+    .image-class {
+    width: 200px; /* Set the width */
+    height: auto; /* Maintain aspect ratio */
+}
+</style>
+
+<div class="image-class" ><img src="{{ user.avatar.url }}"></div>
+
+<h1>Hello {{ user.username }}</h1>
 
 <a href="{% url 'logout'%}">LOGOUT</a>
 
