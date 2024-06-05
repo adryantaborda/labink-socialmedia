@@ -1,18 +1,24 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse
 from .models import User
 from .forms import MyUserCreationForm
-from .functions import check_strength
+from .functions import check_strength, clean_username
 import requests
 
+
 # Create your views here.
+
+'''Main Page'''
 
 def home(request):
     if request.user.is_authenticated == False:
         return redirect('login')
     return render(request,'home.html')      
+
+'''Login user with username and password'''
 
 def loginUser(request):
     if request.user.is_authenticated:
@@ -37,6 +43,8 @@ def loginUser(request):
         
     return render(request,'loginpage.html',{'page':page})
 
+'''Create your account'''
+
 def createrUser(request):
     if request.user.is_authenticated:
         return redirect('home')
@@ -46,13 +54,17 @@ def createrUser(request):
     if request.method == 'POST':
         form = MyUserCreationForm(request.POST)
         if form.is_valid():
+            
 
             password = form.cleaned_data.get('password1')
             strong, message = check_strength(password)
-            print(strong,message)
 
             if strong:
                 user = form.save(commit=False)
+                data_username = form.cleaned_data.get('username')
+                user.username = clean_username(data_username)
+                print(user.username)
+                
                 try:
                     user.save()
                     messages.success(request,'Congratulations! Your account was created!')
@@ -69,6 +81,7 @@ def createrUser(request):
 
     return render(request,'signuppage.html',context)
         
+'''Logout of your account'''
 
 def logoutUser(request):
     if request.user.is_authenticated == False:
@@ -76,4 +89,18 @@ def logoutUser(request):
     
     logout(request)
     return redirect('login')
+
+'''See your profile'''
+
+@login_required(login_url='login')
+def UserProfile(request,username):
+    try:
+        user = User.objects.get(username=username)
+    except:
+        messages.error("Username not found.")
+
+    context = {'user':user}
+    
+    return render(request,'profile.html',context)
+
     
