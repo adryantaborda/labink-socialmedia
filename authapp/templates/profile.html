@@ -1,0 +1,17 @@
+{% block content %}
+
+<style>
+    .image-class {
+    width: 200px; /* Set the width */
+    height: auto; /* Maintain aspect ratio */
+}
+</style>
+
+<div class="image-class" ><img src="{{ user.avatar.url }}"></div>
+
+{{ user.username }}
+
+<h1>Bio:</h1>
+{{ user.bio }}
+
+{% endblock content %}
