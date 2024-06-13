@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('authapp.urls')),
     path('api/', include('authapp.api.urls')),
+    path('settings/',include('authapp.usersettings.urls'))
 ]
 
 if settings.DEBUG:
