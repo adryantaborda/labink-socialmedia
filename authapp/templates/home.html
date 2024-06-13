@@ -11,9 +11,12 @@
 }
 </style>
 
-<div class="image-class" ><img src="{{ user.avatar.url }}"></div>
+<div><img class="image-class" src="{{ user.avatar.url }}"></div>
 
 <h1>Hello {{ user.username }}</h1>
+
+<a href="{% url 'profile' username=user.username %}">PROFILE</a>
+<div></div>
 
 <a href="{% url 'logout'%}">LOGOUT</a>
 

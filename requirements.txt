@@ -6,3 +6,5 @@ psycopg2==2.9.9
 djangorestframework==3.15.1
 django-cors-headers==4.3.1
 django-password-strength==1.2.1
+django-image-cropping==1.7
+easy-thumbnails==2.8.5
