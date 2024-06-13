@@ -7,11 +7,21 @@
 }
 </style>
 
-<div class="image-class" ><img src="{{ user.avatar.url }}"></div>
+{% if user.avatar %}
+<div><img class="image-class" src="{{ user.avatar.url }}"></div>
+{% endif %}
 
-{{ user.username }}
+<h2>@{{ user.username }}</h2>
 
-<h1>Bio:</h1>
-{{ user.bio }}
+{% if user.bio %}
+<h2>{{ user.bio }}</h2>
+{% endif %}
+
+{% if user.username == logged_user.username %}
+<h3>Birthday -- {{ user.birthday }}</h3>
+<h3>Gender -- {{ user.gender}}</h3>
+
+<h2><a href="{% url 'profile-edit'%}">Edit your profile</a></h2>
+{% endif %}
 
 {% endblock content %}

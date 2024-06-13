@@ -1,0 +1,20 @@
+{% load thumbnail %}
+{% load cropping %}
+{% block content %}
+
+<div>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+        <div>
+        <label for="profile_pic">{{field.label}}</label>
+            {{field}}
+          </div>
+        {% endfor%}
+        <input type="submit" value="Register" />
+    </form>
+</div>
+
+
+
+{% endblock content %}
