@@ -58,6 +58,7 @@ def createrUser(request):
 
             password = form.cleaned_data.get('password1')
             strong, message = check_strength(password)
+            
 
             if strong:
                 user = form.save(commit=False)
@@ -70,12 +71,14 @@ def createrUser(request):
                     messages.success(request,'Congratulations! Your account was created!')
                     messages.success(request,'Please login')
                     return redirect('home')
-                except:
+                except Exception as e:
+                    print(e)
                     messages.error(request,"Couldn't create your account")
             else:
                 messages.error(request, message)
+
         else:
-            messages.error(request,"Couldn't create your account")
+            messages.error(request,"Couldn't create your account. Invalid form")
 
     context = {'form':form}    
 
@@ -94,12 +97,13 @@ def logoutUser(request):
 
 @login_required(login_url='login')
 def UserProfile(request,username):
+    logged_user = request.user
     try:
         user = User.objects.get(username=username)
     except:
         messages.error("Username not found.")
 
-    context = {'user':user}
+    context = {'user':user,'logged_user':logged_user}
     
     return render(request,'profile.html',context)
 
