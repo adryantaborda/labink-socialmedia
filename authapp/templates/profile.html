@@ -1,3 +1,4 @@
+{% include 'navbar.html '%}
 {% block content %}
 
 <style>
@@ -17,11 +18,16 @@
 <h2>{{ user.bio }}</h2>
 {% endif %}
 
+<h3>{{ user.gender}}</h3>
+
 {% if user.username == logged_user.username %}
 <h3>Birthday -- {{ user.birthday }}</h3>
-<h3>Gender -- {{ user.gender}}</h3>
+
 
 <h2><a href="{% url 'profile-edit'%}">Edit your profile</a></h2>
 {% endif %}
+
+<h3>{{ user_age }} Years old</h3>
+
 
 {% endblock content %}
