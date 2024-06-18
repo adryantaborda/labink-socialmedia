@@ -12,14 +12,6 @@ def ProfileSettings(request):
         print(form.data)
         if form.is_valid():
             form.save(commit=False)
-
-            # if request.FILES.get('avatar'):  # Check for uploaded avatar
-            #     profile_form.avatar = request.FILES['avatar']
-
-            # try:
-            #     user.avatar.save(user_directory_path(user))
-            # except Exception as e:
-            #     print(e)
     
             if request.FILES.get(user.avatar) == False:
                 print("Modifying...")
@@ -29,19 +21,7 @@ def ProfileSettings(request):
 
             form.save()
             return redirect(reverse('profile', kwargs={'username':user.username}))
-    
 
     context = {"user":user,"form":form}
 
     return render(request,'useredit.html',context)
-
-from image_cropping.utils import get_backend
-# thumbnail_url = get_backend().get_thumbnail_url(
-#     User.avatar,
-#     {
-#         'size': (430, 360),
-#         'box': User.cropping,
-#         'crop': True,
-#         'detail': True,
-#     }
-# )
