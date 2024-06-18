@@ -7,7 +7,8 @@ from .models import User
 from .forms import MyUserCreationForm
 from .functions import check_strength, clean_username
 import requests
-
+import calendar
+from datetime import date
 
 # Create your views here.
 
@@ -50,37 +51,44 @@ def createrUser(request):
         return redirect('home')
     
     form = MyUserCreationForm()
-
+    
     if request.method == 'POST':
         form = MyUserCreationForm(request.POST)
+
         if form.is_valid():
             
 
             password = form.cleaned_data.get('password1')
             strong, message = check_strength(password)
-            
 
             if strong:
                 user = form.save(commit=False)
-                data_username = form.cleaned_data.get('username')
-                user.username = clean_username(data_username)
-                print(user.username)
                 
+                data_username = form.cleaned_data.get('username')
+                
+                user.username = clean_username(data_username)
+
+                birthday = form.cleaned_data.get('birthday')
+                if birthday:
+                    user.set_birthday_clean(birthday.year, birthday.month, birthday.day)       
+
                 try:
                     user.save()
                     messages.success(request,'Congratulations! Your account was created!')
                     messages.success(request,'Please login')
+                    
                     return redirect('home')
                 except Exception as e:
-                    print(e)
                     messages.error(request,"Couldn't create your account")
             else:
                 messages.error(request, message)
 
         else:
+            
+            print(form.data)
             messages.error(request,"Couldn't create your account. Invalid form")
 
-    context = {'form':form}    
+    context = {'form':form,}    
 
     return render(request,'signuppage.html',context)
         
@@ -98,12 +106,15 @@ def logoutUser(request):
 @login_required(login_url='login')
 def UserProfile(request,username):
     logged_user = request.user
+    
     try:
         user = User.objects.get(username=username)
     except:
         messages.error("Username not found.")
 
-    context = {'user':user,'logged_user':logged_user}
+    user_age = user.get_age()
+
+    context = {'user':user,'logged_user':logged_user,'user_age':user_age}
     
     return render(request,'profile.html',context)
 
