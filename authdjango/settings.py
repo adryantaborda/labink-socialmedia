@@ -165,3 +165,11 @@ CORS_ORIGIN_WHITELIST = [
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+CELERY_BROKER_URL = 'amqp://staff9774:labinkmqhost@localhost:15672//'
+CELERY_RESULT_BACKEND = 'rpc://'
+
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'

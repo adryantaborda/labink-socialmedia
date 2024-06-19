@@ -47,8 +47,6 @@ class User(AbstractUser):
 
     """ FOLLOWING SYSTEM """
 
-    connectionsUser = models.ManyToManyField(null=True,blank=True)
-
     def set_birthday_clean(self,year,month,day):
         self.year = year
         self.month = month
@@ -84,3 +82,18 @@ class User(AbstractUser):
                 pass
         
     USERNAME_FIELD = 'username'
+
+class ConnectionRequest(models.Model):
+    sender = models.ForeignKey(User,on_delete=models.CASCADE, verbose_name='User',related_name='sender_request')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User',related_name='receiver_request')
+    status = models.CharField(max_length=10,choices=[('pending', 'Pending'), ('accepted', 'Accepted'), ('declined', 'Declined')], default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+class UserConnections(models.Model):
+    firstuser = models.ForeignKey(ConnectionRequest,on_delete=models.CASCADE, verbose_name='first_user',default=None)
+    seconduser = models.ManyToManyField(ConnectionRequest,blank=True,related_name='second_user',default=None)
+
+    def get_connection(self):
+        connections = {self.firstuser,self.seconduser}
+        return connections
+

@@ -10,5 +10,7 @@ urlpatterns = [
     path('signup/',views.createrUser,name='signup'),
     path('logout/',views.logoutUser, name="logout"),
     path('<str:username>',views.UserProfile, name="profile"),
+    path('connecting/<str:username>',views.RequestConnection, name="requestConnection"),
+    path('disconnecting/<str:username>',views.CancelConnection, name="disconnectUsers"),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
