@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import HttpResponse
-from .models import User
+from django.http import HttpResponse, JsonResponse
+from .models import User, ConnectionRequest, UserConnections
 from .forms import MyUserCreationForm
 from .functions import check_strength, clean_username
 import requests
@@ -112,10 +112,60 @@ def UserProfile(request,username):
     except:
         messages.error("Username not found.")
 
-    user_age = user.get_age()
+    if username != logged_user.username:
+        try:
+            userRequestsConnections = ConnectionRequest.objects.filter(sender=logged_user,status='pending')
+        except:
+            userRequestsConnections = None
+    else:
+        userRequestsConnections = None
 
-    context = {'user':user,'logged_user':logged_user,'user_age':user_age}
+    user_age = user.get_age()
+        
+    try:
+        getRequestConnections = ConnectionRequest.objects.filter(receiver=logged_user,status='pending')
+    except:
+        getRequestConnections = None
+        
+    if getRequestConnections is not None:
+        if request.method == 'POST':
+            if request.POST.get("buttonrequest") == "accept":
+                try:
+                    UserConnections.objects.create(firstuser='',seconduser=getRequestConnections.receiver)
+                except Exception as e:
+                    print(e)
+            else:
+                print("NOT WORKING ")
+    #DEBUG
+    print(getRequestConnections)
+
+    context = {'user':user,'logged_user':logged_user,'user_age':user_age,'getRequestConnections':getRequestConnections,
+               'userRequestsConnections':userRequestsConnections,}
     
     return render(request,'profile.html',context)
 
-    
+def RequestConnection(request,username):
+    try:
+        receiver = User.objects.get(username=username)
+    except:
+        messages.error("Username not found.")
+
+    sender = request.user
+    if ConnectionRequest.objects.filter(sender=sender,receiver=receiver,status='pending'):
+        pass
+    ConnectionRequest.objects.create(sender=sender,receiver=receiver,status='pending')
+
+    return render(request,'requestconnection.html')
+
+def CancelConnection(request,username):
+    sender = request.user
+    try:
+        receiver = User.objects.get(username=username)
+    except:
+        messages.error("Username not found.")
+
+    if ConnectionRequest.objects.filter(sender=sender,receiver=receiver):
+        doRequest = ConnectionRequest.objects.get(sender=sender,receiver=receiver)
+        doRequest.delete()
+
+    return render(request,'deleteconnection.html')
