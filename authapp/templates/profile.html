@@ -13,6 +13,23 @@
 {% endif %}
 
 <h2>@{{ user.username }}</h2>
+{% if user.username != logged_user.username %}
+    {% if userRequestsConnections %}
+        <div>
+            <form action="{% url 'disconnectUsers' user.username %}" method="POST">
+                {% csrf_token %}
+                    <button name="button_to_disconnect" value="button2">Cancel Connection Request</button>
+            </form>
+        </div>
+        {% else %}
+        <div>
+            <form action="{% url 'requestConnection' user.username %}" method="POST">
+                {% csrf_token %}
+                    <button name="button_to_connect" value="button1">Send Connection Request</button>
+            </form>
+        </div>
+        {% endif %}
+{% endif%}
 
 {% if user.bio %}
 <h2>{{ user.bio }}</h2>
@@ -29,5 +46,20 @@
 
 <h3>{{ user_age }} Years old</h3>
 
+{% if user.username == logged_user.username %}
+    <h1>CONNECTIONS REQUESTS</h1>
+    {% if getRequestConnections != None %}
+        {% for request in getRequestConnections %}
+        <div>
+            <p>@{{request.sender.username}} send you a connection request. Do you want to accept?</p>
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" name="buttonrequest" value="accept">Yes, I do.</button>
+                <button type="submit" name="buttonrequest" value="discard">No, I don't.</button>
+            </form>
+        </div>
+        {% endfor %}
+    {% endif %}
+{% endif %}
 
 {% endblock content %}
