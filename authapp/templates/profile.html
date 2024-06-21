@@ -1,5 +1,4 @@
 {% include 'navbar.html '%}
-{% include 'messages.html '%}
 {% block content %}
 
 <style>
@@ -15,7 +14,7 @@
 
 <h2>@{{ user.username }}</h2>
 {% if user.username != logged_user.username %}
-    {% if user_requests_connections %}
+    {% if userRequestsConnections %}
         <div>
             <form action="{% url 'disconnectUsers' user.username %}" method="POST">
                 {% csrf_token %}
@@ -49,8 +48,8 @@
 
 {% if user.username == logged_user.username %}
     <h1>CONNECTIONS REQUESTS</h1>
-    {% if get_request_connections != None %}
-        {% for request in get_request_connections %}
+    {% if getRequestConnections != None %}
+        {% for request in getRequestConnections %}
         <div>
             <p>@{{request.sender.username}} send you a connection request. Do you want to accept?</p>
             <form method="POST">
