@@ -13,11 +13,11 @@ def ProfileSettings(request):
         if form.is_valid():
             form.save(commit=False)
     
-            if request.FILES.get(user.avatar) == False:
+            if request.FILES.get(user.profile_picture) == False:
                 print("Modifying...")
-                return user.avatar == "media/avatardefault.png"
+                return user.profile_picture == "media/profile_picturedefault.png"
             else:
-                print("AVATAR IS NOT NONE")
+                print("profile_picture IS NOT NONE")
 
             form.save()
             return redirect(reverse('profile', kwargs={'username':user.username}))
