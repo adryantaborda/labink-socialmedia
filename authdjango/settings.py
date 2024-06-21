@@ -94,8 +94,8 @@ WSGI_APPLICATION = 'authdjango.wsgi.application'
 DATABASES = {
         'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'userdb',
-        'USER': 'postgres',
+        'NAME': 'labinksocialserver',
+        'USER': 'labinkstaff',
         'PASSWORD': '***REMOVED***',
         'HOST': 'localhost',     # Replace with your PostgreSQL server's address if necessary
         'PORT': '5432',          # Leave empty to use the default PostgreSQL port (usually 5432)
