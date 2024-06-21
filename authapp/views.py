@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -106,33 +106,42 @@ def logoutUser(request):
 @login_required(login_url='login')
 def UserProfile(request,username):
     logged_user = request.user
-    user = get_object_or_404(User, username=username)
+    
+    try:
+        user = User.objects.get(username=username)
+    except:
+        messages.error("Username not found.")
+
+    if username != logged_user.username:
+        try:
+            userRequestsConnections = ConnectionRequest.objects.filter(sender=logged_user,status='pending')
+        except:
+            userRequestsConnections = None
+    else:
+        userRequestsConnections = None
+
     user_age = user.get_age()
-    user_requests_connections = None
-    get_request_connections = None
+        
+    try:
+        getRequestConnections = ConnectionRequest.objects.filter(receiver=logged_user,status='pending')
+    except:
+        getRequestConnections = None
+        
+    if getRequestConnections is not None:
+        if request.method == 'POST':
+            if request.POST.get("buttonrequest") == "accept":
+                try:
+                    UserConnections.objects.create(firstuser='',seconduser=getRequestConnections.receiver)
+                except Exception as e:
+                    print(e)
+            else:
+                print("NOT WORKING ")
+    #DEBUG
+    print(getRequestConnections)
+
+    context = {'user':user,'logged_user':logged_user,'user_age':user_age,'getRequestConnections':getRequestConnections,
+               'userRequestsConnections':userRequestsConnections,}
     
-    if logged_user != username:
-        user_requests_connections = ConnectionRequest.objects.filter(sender=logged_user, status='pending')
-    get_request_connections = ConnectionRequest.objects.filter(receiver=logged_user, status='pending')
-
-
-    if get_request_connections.exists() and request.method == 'POST':
-        action = request.POST.get("buttonrequest") 
-        connection_request = get_request_connections.first()
-        if action == "accept":
-            new_connection = UserConnections.objects.create(firstuser=logged_user,seconduser=connection_request.sender)
-            new_connection.define_connection()
-            print(new_connection.connection)
-            messages.success(request,f"@{connection_request.sender} is now connected with you")
-            connection_request.delete()
-        else:
-            connection_request.delete()
-    
-
-    context = {'user':user,'logged_user':logged_user,'user_age':user_age,
-               'get_request_connections':get_request_connections,
-               'user_requests_connections':user_requests_connections,}
-
     return render(request,'profile.html',context)
 
 def RequestConnection(request,username):
@@ -144,7 +153,6 @@ def RequestConnection(request,username):
     sender = request.user
     if ConnectionRequest.objects.filter(sender=sender,receiver=receiver,status='pending'):
         pass
-
     ConnectionRequest.objects.create(sender=sender,receiver=receiver,status='pending')
 
     return render(request,'requestconnection.html')
