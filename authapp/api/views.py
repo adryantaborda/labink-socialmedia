@@ -7,8 +7,6 @@ from django.http import JsonResponse
 from rest_framework import authentication
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
-
-
 @api_view(['GET'])
 def getRoutes(request):
     routes = [
