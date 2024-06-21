@@ -9,23 +9,23 @@
 </style>
 
 {% if user.avatar %}
-<div><img class="image-class" src="{{ user.avatar.url }}"></div>
+<div><img class="image-class" src="{{ user.profile_picture.url }}"></div>
 {% endif %}
 
 <h2>@{{ user.username }}</h2>
 {% if user.username != logged_user.username %}
     {% if userRequestsConnections %}
         <div>
-            <form action="{% url 'disconnectUsers' user.username %}" method="POST">
+            <form a method="POST">
                 {% csrf_token %}
-                    <button name="button_to_disconnect" value="button2">Cancel Connection Request</button>
+                    <button name="buttonrequest" value="button">Cancel Connection Request</button>
             </form>
         </div>
         {% else %}
         <div>
             <form action="{% url 'requestConnection' user.username %}" method="POST">
                 {% csrf_token %}
-                    <button name="button_to_connect" value="button1">Send Connection Request</button>
+                    <button name="buttonrequest" value="button1">Send Connection Request</button>
             </form>
         </div>
         {% endif %}
@@ -55,7 +55,7 @@
             <form method="POST">
                 {% csrf_token %}
                 <button type="submit" name="buttonrequest" value="accept">Yes, I do.</button>
-                <button type="submit" name="buttonrequest" value="discard">No, I don't.</button>
+                <button type="submit" name="buttonrequest" value="decline">No, I don't.</button>
             </form>
         </div>
         {% endfor %}

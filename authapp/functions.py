@@ -1,5 +1,7 @@
 import re
 
+''' THIS FUNCTION WILL CHECK THE STRENGTH OF YOUR PASSWORD BEFORE SAVING '''
+
 def check_strength(password):
     if len(password) < 8:
         return False, "Password must be at least 8 characters long."
@@ -7,8 +9,6 @@ def check_strength(password):
         return False, "Password must contain letters"
     if not re.search(r"\d", password):
         return False, "Password must contain at least one number."
-    # if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
-    #     return False, "Password should contain at least one special character to be stronger."
     
     return True, "Password is strong."
 

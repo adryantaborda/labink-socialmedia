@@ -71,7 +71,7 @@ def createrUser(request):
                 birthday = form.cleaned_data.get('birthday')
                 if birthday:
                     user.set_birthday_clean(birthday.year, birthday.month, birthday.day)       
-
+                    
                 try:
                     user.save()
                     messages.success(request,'Congratulations! Your account was created!')
@@ -82,9 +82,7 @@ def createrUser(request):
                     messages.error(request,"Couldn't create your account")
             else:
                 messages.error(request, message)
-
         else:
-            
             print(form.data)
             messages.error(request,"Couldn't create your account. Invalid form")
 
@@ -104,7 +102,7 @@ def logoutUser(request):
 '''See your profile'''
 
 @login_required(login_url='login')
-def UserProfile(request,username):
+def userProfile(request,username):
     logged_user = request.user
     
     try:
@@ -141,10 +139,31 @@ def UserProfile(request,username):
 
     context = {'user':user,'logged_user':logged_user,'user_age':user_age,'getRequestConnections':getRequestConnections,
                'userRequestsConnections':userRequestsConnections,}
-    
+
+    if logged_user != username:
+        user_requests_connections = ConnectionRequest.objects.filter(sender=logged_user, status='pending')
+    get_request_connections = ConnectionRequest.objects.filter(receiver=logged_user, status='pending')
+
+
+    if get_request_connections.exists() and request.method == 'POST':
+        action = request.POST.get("buttonrequest") 
+        connection_request = get_request_connections.first()
+        if action == "accept":
+            new_connection = UserConnections.objects.create(firstuser=logged_user,seconduser=connection_request.sender)
+            new_connection.define_connection()
+            print(new_connection.connection)
+            messages.success(request,f"@{connection_request.sender} is now connected with you")
+            connection_request.delete()
+        else:
+            connection_request.delete()
+
+    context = {'user':user,'logged_user':logged_user,'user_age':user_age,
+               'get_request_connections':get_request_connections,
+               'user_requests_connections':user_requests_connections,}
+
     return render(request,'profile.html',context)
 
-def RequestConnection(request,username):
+def requestConnection(request,username):
     try:
         receiver = User.objects.get(username=username)
     except:
@@ -157,7 +176,7 @@ def RequestConnection(request,username):
 
     return render(request,'requestconnection.html')
 
-def CancelConnection(request,username):
+def cancelConnection(request,username):
     sender = request.user
     try:
         receiver = User.objects.get(username=username)
