@@ -5,7 +5,6 @@ from PIL import Image
 from django.conf import settings
 from datetime import date
 import os
-import json
 # Create your models here.
 
 def user_directory_path(instance,filename):
@@ -91,12 +90,10 @@ class ConnectionRequest(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     
 class UserConnections(models.Model):
-    firstuser = models.ForeignKey(User,on_delete=models.CASCADE, related_name='first_user',default=None)
-    seconduser = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,related_name='second_user',default=None)
-    connection = ""
-    
-    def define_connection(self):
-        if self.firstuser and self.seconduser:
-            self.connection += f"{self.firstuser.username}-{self.seconduser.username}"
-            return self.connection
-        
+    firstuser = models.ForeignKey(ConnectionRequest,on_delete=models.CASCADE, verbose_name='first_user',default=None)
+    seconduser = models.ManyToManyField(ConnectionRequest,blank=True,related_name='second_user',default=None)
+
+    def get_connection(self):
+        connections = {self.firstuser,self.seconduser}
+        return connections
+
