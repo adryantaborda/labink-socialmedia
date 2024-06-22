@@ -10,6 +10,8 @@ urlpatterns = [
     path('logout/',views.logoutUser, name="logout"),
     path('<str:username>',views.userProfile, name="profile"),
     path('connecting/<str:username>',views.requestConnection, name="requestConnection"),
-    path('disconnecting/<str:username>',views.cancelConnection, name="disconnectUsers"),
+    path('cancel-connection-request/<str:username>',views.cancelConnectionRequest, name="cancelConnectionRequest"),
+    path('disconnecting/<str:username>',views.cancelConnection,name='cancelConnection'),
+    path('connections/<str:username>',views.Connections,name='connections')
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
