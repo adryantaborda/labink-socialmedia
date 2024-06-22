@@ -7,10 +7,25 @@ def ProfileSettings(request):
     user = request.user
     form = ProfileForm(instance=user)
     if request.method == 'POST':
-        print("Working on profile settings now...")
+
         form = ProfileForm(request.POST,request.FILES,instance=user)
-        print(form.data)
+
         if form.is_valid():
+
+            if request.POST.get("firstname"):
+                try:
+                    firstname = request.POST.get("firstname")
+                    user.first_name = firstname
+                except Exception as e:
+                    print(e)
+
+            if request.POST.get("lastname"):
+                try:
+                    lastname = request.POST.get("lastname")
+                    user.last_name = lastname
+                except Exception as e:
+                    print(e)
+
             form.save(commit=False)
     
             if request.FILES.get(user.profile_picture) == False:
