@@ -13,7 +13,9 @@
 
 <div><img class="image-class" src="{{ user.profile_picture.url }}"></div>
 
-<h1>Hello {{ user.username }}</h1>
+<h1>Hello {{user.first_name }} {{user.last_name}}</h1>
+
+<h3>@{{ user.username }}</h3>
 
 <a href="{% url 'profile' username=user.username %}">PROFILE</a>
 <div></div>

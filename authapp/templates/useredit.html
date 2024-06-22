@@ -3,9 +3,19 @@
 <div>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
+        
+        <div>
+            <label for="">First Name</label>
+            <input type="text" name="firstname" value="{{ user.first_name }}">
+        </div>
+
+        <div>
+            <label for="">Last Name</label>
+            <input type="text" name="lastname" value="{{ user.last_name }}">
+        </div>
         {% for field in form %}
         <div>
-        <label for="profile_pic">{{field.label}}</label>
+        <label for="profile_pic">{{field.label}} </label>
             {{field}}
           </div>
         {% endfor%}
