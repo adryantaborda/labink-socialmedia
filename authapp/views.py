@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -57,7 +57,6 @@ def createrUser(request):
 
         if form.is_valid():
             
-
             password = form.cleaned_data.get('password1')
             strong, message = check_strength(password)
 
@@ -67,6 +66,20 @@ def createrUser(request):
                 data_username = form.cleaned_data.get('username')
                 
                 user.username = clean_username(data_username)
+
+                if request.POST.get("firstname"):
+                    try:
+                        firstname = request.POST.get("firstname")
+                        user.first_name = firstname
+                    except Exception as e:
+                        print(e)
+
+                if request.POST.get("lastname"):
+                    try:
+                        lastname = request.POST.get("lastname")
+                        user.last_name = lastname
+                    except Exception as e:
+                        print(e)
 
                 birthday = form.cleaned_data.get('birthday')
                 if birthday:
@@ -79,6 +92,7 @@ def createrUser(request):
                     
                     return redirect('home')
                 except Exception as e:
+                    print(e)
                     messages.error(request,"Couldn't create your account")
             else:
                 messages.error(request, message)
@@ -104,46 +118,18 @@ def logoutUser(request):
 @login_required(login_url='login')
 def userProfile(request,username):
     logged_user = request.user
-    
-    try:
-        user = User.objects.get(username=username)
-    except:
-        messages.error("Username not found.")
-
-    if username != logged_user.username:
-        try:
-            userRequestsConnections = ConnectionRequest.objects.filter(sender=logged_user,status='pending')
-        except:
-            userRequestsConnections = None
-    else:
-        userRequestsConnections = None
-
+    user = get_object_or_404(User, username=username)
     user_age = user.get_age()
-        
-    try:
-        getRequestConnections = ConnectionRequest.objects.filter(receiver=logged_user,status='pending')
-    except:
-        getRequestConnections = None
-        
-    if getRequestConnections is not None:
-        if request.method == 'POST':
-            if request.POST.get("buttonrequest") == "accept":
-                try:
-                    UserConnections.objects.create(firstuser='',seconduser=getRequestConnections.receiver)
-                except Exception as e:
-                    print(e)
-            else:
-                print("NOT WORKING ")
-    #DEBUG
-    print(getRequestConnections)
+    user_requests_connections = None
+    get_request_connections = None
+    connection_with_this_user = False
+    usercounter = 0
 
-    context = {'user':user,'logged_user':logged_user,'user_age':user_age,'getRequestConnections':getRequestConnections,
-               'userRequestsConnections':userRequestsConnections,}
+    ''' user connections part '''
 
     if logged_user != username:
         user_requests_connections = ConnectionRequest.objects.filter(sender=logged_user, status='pending')
     get_request_connections = ConnectionRequest.objects.filter(receiver=logged_user, status='pending')
-
 
     if get_request_connections.exists() and request.method == 'POST':
         action = request.POST.get("buttonrequest") 
@@ -151,17 +137,33 @@ def userProfile(request,username):
         if action == "accept":
             new_connection = UserConnections.objects.create(firstuser=logged_user,seconduser=connection_request.sender)
             new_connection.define_connection()
-            print(new_connection.connection)
+
+            new_connection.save()
             messages.success(request,f"@{connection_request.sender} is now connected with you")
             connection_request.delete()
         else:
             connection_request.delete()
 
+    connections = list(UserConnections.objects.values_list("connection",flat=True))
+
+    for connection in connections:
+        if user.username in connection:
+            usercounter += 1
+            if logged_user != username and logged_user.username in connection:
+                connection_with_this_user = True
+    
     context = {'user':user,'logged_user':logged_user,'user_age':user_age,
                'get_request_connections':get_request_connections,
-               'user_requests_connections':user_requests_connections,}
+               'user_requests_connections':user_requests_connections,
+               'connections':connections,'usercounter':usercounter,
+               'connection_with_this_user':connection_with_this_user,}
 
     return render(request,'profile.html',context)
+
+
+
+
+
 
 def requestConnection(request,username):
     try:
@@ -176,7 +178,8 @@ def requestConnection(request,username):
 
     return render(request,'requestconnection.html')
 
-def cancelConnection(request,username):
+def cancelConnectionRequest(request,username):
+    page = 'cancelConnectionRequest'
     sender = request.user
     try:
         receiver = User.objects.get(username=username)
@@ -187,4 +190,39 @@ def cancelConnection(request,username):
         doRequest = ConnectionRequest.objects.get(sender=sender,receiver=receiver)
         doRequest.delete()
 
-    return render(request,'deleteconnection.html')
+    return render(request,'cancelrequestconnection.html',{'page':page})
+
+
+def Connections(request,username):
+    logged_user = request.user
+    user = get_object_or_404(User, username=username)
+    list_connections = list(UserConnections.objects.values_list("connection",flat=True))
+    user_connections = []
+    for connection in list_connections:
+        if user.username in connection:
+            print(connection)
+            part1, part2 = connection.split("-")
+            if user.username != part1:
+                user_connections.append(part1) 
+            else:
+                user_connections.append(part2)
+    print(user_connections)
+
+    context = {'user':user,'logged_user':logged_user,'user_connections':user_connections}
+         
+    return render(request,'connections.html',context)
+
+def cancelConnection(request,username):
+    page = 'cancelConnection'
+    logged_user = request.user
+    user = get_object_or_404(User,username=username)
+
+    list_connections = list(UserConnections.objects.values_list("connection",flat=True))
+
+    if logged_user.username != user.username:
+        for connection in list_connections:
+            if user.username in connection and logged_user.username in connection:
+                connectiontodelete = UserConnections.objects.filter(connection=connection)
+                connectiontodelete.delete()
+        
+    return render(request,'cancelconnectionrequest.html',{'page':page})

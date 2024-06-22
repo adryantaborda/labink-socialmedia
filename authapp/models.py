@@ -33,7 +33,6 @@ class User(AbstractUser):
 
     ''' MAIN INFOS '''
 
-    complete_name = models.CharField(max_length=50)
     username = models.CharField(max_length=20,unique=True)
     bio = models.CharField(null=True, max_length=140,blank=True)
     profile_picture = models.ImageField(upload_to=user_directory_path,default='user_default/pfpdefault.png',blank=True,null=True)
@@ -50,6 +49,7 @@ class User(AbstractUser):
     attractedTo = models.CharField(max_length=6,choices=AttractedToGenders.choices,default=None,null=True,blank=True)
 
     ''' DEFINE YEAR, MONTH AND DAY AND SET YOUR BIRTHDAY '''
+
     def set_birthday_clean(self,year,month,day):
         self.year = year
         self.month = month
@@ -97,10 +97,11 @@ class ConnectionRequest(models.Model):
 ''' DEFINE THE CONNECTION BETWEEN USERS '''
     
 class UserConnections(models.Model):
-    firstuser = models.ForeignKey(ConnectionRequest,on_delete=models.CASCADE, verbose_name='first_user',default=None)
-    seconduser = models.ManyToManyField(ConnectionRequest,blank=True,related_name='second_user',default=None)
+    firstuser = models.ForeignKey(User,on_delete=models.CASCADE, related_name='first_user',default=None)
+    seconduser = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,related_name='second_user',default=None)
+    connection = models.CharField(default=None,blank=True,null=True)
 
-    def get_connection(self):
-        connections = {self.firstuser,self.seconduser}
-        return connections
-
+    def define_connection(self):
+        if self.firstuser and self.seconduser:
+            self.connection  = f"{self.firstuser.username}-{self.seconduser.username}"
+        
