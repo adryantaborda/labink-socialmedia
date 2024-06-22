@@ -10,6 +10,13 @@
         {{ form.non_field_errors }}
         
         <div>
+            First Name: <input type="text" name="firstname">
+            
+        </div>
+        <div>
+            Last Name: <input type="text" name="lastname">
+        </div>
+        <div>
             {{ form.username.label_tag }}
             {{ form.username }}
             {{ form.username.errors }}
@@ -56,6 +63,7 @@
             {{ form.birthday }}
             {{ form.birthday.errors }}
         </div>
+        
         <input type="submit" value="Register" />
     </form>
 </div>
