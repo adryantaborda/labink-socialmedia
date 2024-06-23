@@ -1,0 +1,19 @@
+{% block content %}
+
+{% if logged_user.username == user.username %}
+
+<h2>Your connections</h2>
+
+{% else %}
+
+<h2>{{user.username}} connections</h2>
+
+{% endif %}
+{% for singleconnection in user_connections %}
+<label for="">
+    <p>{{singleconnection}}</p>
+    <a href="{% url 'profile' singleconnection %}">Check Profile</a>
+</label>
+
+{% endfor %}
+{% endblock content %}
