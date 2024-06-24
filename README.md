@@ -9,4 +9,5 @@ TECHNOLOGIES:
 Sign up and login into your account
 
 
-![Labink Login](https://github.com/adryantaborda/labink-socialmedia/assets/134542977/2088b013-0cbb-4480-966f-982baf1f47fd)
+
+![Labink Login](https://github.com/adryantaborda/labink-socialmedia/assets/134542977/b0d433a7-8069-4ac7-b0df-8c9c1dbccd3b)
