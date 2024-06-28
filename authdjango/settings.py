@@ -95,7 +95,7 @@ DATABASES = {
         'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'labinksocialserver',
-        'USER': 'labinkstaff',
+        'USER': 'postgres',
         'PASSWORD': '***REMOVED***',
         'HOST': 'localhost',     # Replace with your PostgreSQL server's address if necessary
         'PORT': '5432',          # Leave empty to use the default PostgreSQL port (usually 5432)
@@ -165,11 +165,3 @@ CORS_ORIGIN_WHITELIST = [
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
-
-CELERY_BROKER_URL = 'amqp://staff9774:labinkmqhost@localhost:15672//'
-CELERY_RESULT_BACKEND = 'rpc://'
-
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'UTC'
