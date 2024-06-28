@@ -1,0 +1,73 @@
+{% extends 'main.html' %}
+{% include 'navbar.html '%}
+
+{% block content %}
+
+
+<div><img class="image-class" src="{{ user.profile_picture.url }}"></div>
+
+
+<h1>{{user.first_name }} {{user.last_name}}'s Profile</h1>
+<h3>@{{ user.username }}</h3>
+
+{% if user.username != logged_user.username %} 
+    {% if connection_with_this_user %}
+        <div>
+            <form action="{% url 'cancelConnection' user.username %}" method="POST">
+                {% csrf_token %}
+                    <button name="buttonrequest" value="button">Disconnect with {{user.username}}</button>
+            </form>
+        </div>
+
+    {% elif user_requests_connections %}
+                <div>
+                    <form action="{% url 'cancelConnectionRequest' user.username %}" method="POST">
+                        {% csrf_token %}
+                            <button name="buttonrequest" value="button">Cancel Connection Request</button>
+                    </form>
+                </div>
+                {% else %}
+                <div>
+                    <form action="{% url 'requestConnection' user.username %}" method="POST">
+                        {% csrf_token %}
+                            <button name="buttonrequest" value="button1">Send Connection Request</button>
+                    </form>
+                </div>
+    {% endif %}
+    
+{% endif %}
+
+{% if user.bio %}
+<h2>{{ user.bio }}</h2>
+{% endif %}
+
+<h2>{{usercounter}} Connections</h2>
+<a href="{% url 'connections' user.username %}">See connections</a>
+<h3>{{ user.gender}}</h3>
+
+{% if user.username == logged_user.username %}
+<h3>Birthday -- {{ user.birthday }}</h3>
+
+
+<h2><a href="{% url 'profile-edit'%}">Edit your profile</a></h2>
+{% endif %}
+
+<h3>{{ user_age }} years old</h3>
+
+{% if user.username == logged_user.username %}
+    <h1>CONNECTIONS REQUESTS</h1>
+    {% if get_request_connections != None %}
+        {% for request in get_request_connections %}
+        <div>
+            <p>@{{request.sender.username}} send you a connection request. Do you want to accept?</p>
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" name="buttonrequest" value="accept">Yes, I do.</button>
+                <button type="submit" name="buttonrequest" value="decline">No, I don't.</button>
+            </form>
+        </div>
+        {% endfor %}
+    {% endif %}
+{% endif %}
+
+{% endblock content %}
