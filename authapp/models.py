@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from image_cropping import ImageRatioField, ImageCropField
 from PIL import Image
 from django.conf import settings
 from datetime import date
