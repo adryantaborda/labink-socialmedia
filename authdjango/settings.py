@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 from pathlib import Path
-from easy_thumbnails.conf import Settings as thumbnail_settings
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -50,8 +53,6 @@ INSTALLED_APPS = [
     'authapp.apps.AuthappConfig',
     'rest_framework',
     'corsheaders',
-    'easy_thumbnails',
-    'image_cropping',
 ]
 
 
@@ -92,13 +93,13 @@ WSGI_APPLICATION = 'authdjango.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-        'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'labinksocialserver',
-        'USER': 'postgres',
-        'PASSWORD': '***REMOVED***',
-        'HOST': 'localhost',     # Replace with your PostgreSQL server's address if necessary
-        'PORT': '5432',          # Leave empty to use the default PostgreSQL port (usually 5432)
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env('POSTGRES_DB'),
+        'USER': env('POSTGRES_USER'),
+        'PASSWORD': env('POSTGRES_PASSWORD'),
+        'HOST': 'db',
+        'PORT': 5432,
     }
 }
 
