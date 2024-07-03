@@ -28,9 +28,13 @@ def loginUser(request):
     page = 'login'
     if request.method == 'POST':
         username = request.POST.get('username')
+<<<<<<< HEAD
         print(f"username{username}")
         password = request.POST.get('password')
         print(f"password{password}")
+=======
+        password = request.POST.get('password')
+>>>>>>> main
         
         try:
             user = User.objects.get(username=username)
@@ -192,7 +196,11 @@ def cancelConnectionRequest(request,username):
         doRequest = ConnectionRequest.objects.get(sender=sender,receiver=receiver)
         doRequest.delete()
 
+<<<<<<< HEAD
     return render(request,'cancelconnectionrequest.html',{'page':page})
+=======
+    return render(request,'cancelrequestconnection.html',{'page':page})
+>>>>>>> main
 
 
 def Connections(request,username):

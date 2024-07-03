@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends 'main.html' %}
 {% load static %}
 
@@ -8,6 +9,20 @@
 
 
     
+=======
+{% load static%}
+{% include 'navbar.html '%}
+{% include 'messages.html' %}
+
+{% block content %}
+
+<style>
+    .image-class {
+    width: 200px; /* Set the width */
+    height: auto; /* Maintain aspect ratio */
+}
+</style>
+>>>>>>> main
 
 <div><img class="image-class" src="{{ user.profile_picture.url }}"></div>
 

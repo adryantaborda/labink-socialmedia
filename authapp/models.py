@@ -98,7 +98,11 @@ class ConnectionRequest(models.Model):
 class UserConnections(models.Model):
     firstuser = models.ForeignKey(User,on_delete=models.CASCADE, related_name='first_user',default=None)
     seconduser = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,related_name='second_user',default=None)
+<<<<<<< HEAD
     connection = models.CharField(max_length=300,default=None,blank=True,null=True)
+=======
+    connection = models.CharField(default=None,blank=True,null=True)
+>>>>>>> main
 
     def define_connection(self):
         if self.firstuser and self.seconduser:
