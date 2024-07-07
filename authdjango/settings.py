@@ -11,15 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 from pathlib import Path
-<<<<<<< HEAD
 import psycopg2 
-=======
-import environ
-
-env = environ.Env()
-environ.Env.read_env()
-
->>>>>>> main
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -106,23 +98,13 @@ WSGI_APPLICATION = 'authdjango.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-<<<<<<< HEAD
         'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'labinksocialserver',
+        'NAME': '',
         'USER': 'postgres',
-        'PASSWORD': '***REMOVED***',
+        'PASSWORD': '',
         'HOST': 'localhost',     # Replace with your PostgreSQL server's address if necessary
         'PORT':  '5432',          # Leave empty to use the default PostgreSQL port (usually 5432)
-=======
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('POSTGRES_DB'),
-        'USER': env('POSTGRES_USER'),
-        'PASSWORD': env('POSTGRES_PASSWORD'),
-        'HOST': 'db',
-        'PORT': 5432,
->>>>>>> main
     }
 }
 # Password validation
@@ -186,8 +168,4 @@ CORS_ORIGIN_WHITELIST = [
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-<<<<<<< HEAD
 ]
-=======
-]
->>>>>>> main
