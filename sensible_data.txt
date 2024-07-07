@@ -1,2 +1,0 @@
-pw_postgres = xmlzkdY82@
-sv_postgres = lbsdb
