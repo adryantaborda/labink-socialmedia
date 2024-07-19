@@ -1,24 +1,27 @@
-{% include 'navbar.html '%}
+{% extends 'main.html' %}
+
 {% block content %}
 <div>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         
         <div>
-            <label for="">First Name</label>
-            <input type="text" name="firstname" value="{{ user.first_name }}">
+            {{ form.name.label_tag }}
+            {{ form.name }}
+            {{ form.name.errors }}
+        </div>
+        
+        <div>
+            {{ form.bio.label_tag }}
+            {{ form.bio }}
+            {{ form.bio.errors }}
         </div>
 
         <div>
-            <label for="">Last Name</label>
-            <input type="text" name="lastname" value="{{ user.last_name }}">
+            {{ form.profile_picture.label_tag }}
+            {{ form.profile_picture }}
+            {{ form.profile_picture.errors }}
         </div>
-        {% for field in form %}
-        <div>
-        <label for="profile_pic">{{field.label}} </label>
-            {{field}}
-          </div>
-        {% endfor%}
         <input type="submit" value="Register" />
     </form>
 </div>

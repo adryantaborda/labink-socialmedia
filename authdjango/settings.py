@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-!+osiv@k%^%tr5k$1vo45f-9#q7nnn#^mrj(1a3*5v993k+wc4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["127.0.0.1","labinksocial","192.168.100.8"]
 
 CORS_ALLOW_METHODS = (
     "DELETE",
@@ -100,9 +100,9 @@ WSGI_APPLICATION = 'authdjango.wsgi.application'
 DATABASES = {
         'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': '',
+        'NAME': 'lbsdb',
         'USER': 'postgres',
-        'PASSWORD': '',
+        'PASSWORD': 'xmlzkdY82@',
         'HOST': 'localhost',     # Replace with your PostgreSQL server's address if necessary
         'PORT':  '5432',          # Leave empty to use the default PostgreSQL port (usually 5432)
     }
@@ -153,7 +153,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-print(MEDIA_ROOT)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -164,6 +163,7 @@ AUTH_USER_MODEL = "authapp.User"
 
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:8000'
+    
 ]
 
 AUTHENTICATION_BACKENDS = [

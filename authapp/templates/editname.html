@@ -1,0 +1,19 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div>
+            {{ form.name.label_tag }}
+            {{ form.name }}
+            {{ form.name.errors }}
+        </div>
+        <input type="submit" value="Register" />
+    </form>
+</div>
+
+
+
+{% endblock content %}

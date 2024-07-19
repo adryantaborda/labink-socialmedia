@@ -1,5 +1,4 @@
 {% extends 'main.html' %}
-{% include 'navbar.html '%}
 
 {% block content %}
 
@@ -7,11 +6,7 @@
 <div><img class="image-class" src="{{ user.profile_picture.url }}"></div>
 
 
-<<<<<<< HEAD
-<h1>{{user.first_name }} {{user.last_name}}'s Profile</h1>
-=======
-<h1>{{user.first_name }} {{user.last_name}}</h1>
->>>>>>> main
+<h1>{{user.name}}'s Profile</h1>
 <h3>@{{ user.username }}</h3>
 
 {% if user.username != logged_user.username %} 

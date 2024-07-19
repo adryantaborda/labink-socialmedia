@@ -1,3 +1,5 @@
+{% extends 'main.html' %}
+
 {% include 'messages.html' %}
 
 {% block content %}
@@ -7,13 +9,6 @@
         {% csrf_token %}
         {{ form.non_field_errors }}
         
-        <div>
-            First Name: <input type="text" name="firstname">
-            
-        </div>
-        <div>
-            Last Name: <input type="text" name="lastname">
-        </div>
         <div>
             {{ form.username.label_tag }}
             {{ form.username }}
