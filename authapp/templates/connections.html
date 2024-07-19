@@ -1,19 +1,66 @@
+{% extends 'main.html' %}
+
+{% load static %}
+
 {% block content %}
+
+
+<style>
+    .connection {
+        color: rgb(46, 219, 3);
+    }
+
+    .twopeopleicon {
+        width: 23px;
+        height: 23px;
+    }
+    
+
+    .parent-element-connection {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+</style>
 
 {% if logged_user.username == user.username %}
 
+
 <h2>Your connections</h2>
+
+{% for usertouse in userconnection_info %}
+    
+<div class="parent-element-connection">
+    <div><img class="pic_onsearch" src="{{ usertouse.profile_picture.url }}"></div>
+    <p class="connection">{{usertouse.name }} -- @{{usertouse.username}}</p>
+    <img class="twopeopleicon" src="{% static 'labinkmedia/2plpicon.png'%}">
+</div>
+
+<form action="{% url 'profile' usertouse.username %}">
+    <button>Check profile</button>
+</form>
+
+{% endfor %}
 
 {% else %}
 
 <h2>{{user.username}} connections</h2>
 
-{% endif %}
-{% for singleconnection in user_connections %}
-<label for="">
-    <p>{{singleconnection}}</p>
-    <a href="{% url 'profile' singleconnection %}">Check Profile</a>
-</label>
+{% for usertouse in userconnection_info %}
+    
+<div class="parent-element-connection">
+    <div><img class="pic_onsearch" src="{{ usertouse.profile_picture.url }}"></div>
+    <p>{{usertouse.name }} -- @{{usertouse.username}}</p>
+</div>
+
+<form action="{% url 'profile' usertouse.username %}">
+    <button>Check profile</button>
+</form>
 
 {% endfor %}
+
+{% endif %}
+
 {% endblock content %}

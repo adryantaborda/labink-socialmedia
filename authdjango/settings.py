@@ -11,15 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 from pathlib import Path
-<<<<<<< HEAD
 import psycopg2 
-=======
-import environ
-
-env = environ.Env()
-environ.Env.read_env()
-
->>>>>>> main
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -33,7 +25,7 @@ SECRET_KEY = 'django-insecure-!+osiv@k%^%tr5k$1vo45f-9#q7nnn#^mrj(1a3*5v993k+wc4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["127.0.0.1","labinksocial","192.168.100.8"]
 
 CORS_ALLOW_METHODS = (
     "DELETE",
@@ -106,23 +98,13 @@ WSGI_APPLICATION = 'authdjango.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-<<<<<<< HEAD
         'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'labinksocialserver',
+        'NAME': 'lbsdb',
         'USER': 'postgres',
-        'PASSWORD': '***REMOVED***',
+        'PASSWORD': 'xmlzkdY82@',
         'HOST': 'localhost',     # Replace with your PostgreSQL server's address if necessary
         'PORT':  '5432',          # Leave empty to use the default PostgreSQL port (usually 5432)
-=======
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('POSTGRES_DB'),
-        'USER': env('POSTGRES_USER'),
-        'PASSWORD': env('POSTGRES_PASSWORD'),
-        'HOST': 'db',
-        'PORT': 5432,
->>>>>>> main
     }
 }
 # Password validation
@@ -171,7 +153,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-print(MEDIA_ROOT)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -182,12 +163,9 @@ AUTH_USER_MODEL = "authapp.User"
 
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:8000'
+    
 ]
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-<<<<<<< HEAD
 ]
-=======
-]
->>>>>>> main
