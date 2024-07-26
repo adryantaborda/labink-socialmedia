@@ -95,10 +95,10 @@ WSGI_APPLICATION = 'authdjango.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('POSTGRES_DB'),
-        'USER': env('POSTGRES_USER'),
-        'PASSWORD': env('POSTGRES_PASSWORD'),
-        'HOST': 'db',
+        'NAME': 'lbsdb',
+        'USER': 'postgres',
+        'PASSWORD': 'xmlzkdY82@' ,
+        'HOST': 'localhost',
         'PORT': 5432,
     }
 }

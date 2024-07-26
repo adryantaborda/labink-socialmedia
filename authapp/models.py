@@ -90,7 +90,6 @@ class User(AbstractUser):
 class ConnectionRequest(models.Model):
     sender = models.ForeignKey(User,on_delete=models.CASCADE, verbose_name='sender',related_name='sender_request')
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='receiver',related_name='receiver_request')
-    status = models.CharField(max_length=10,choices=[('pending', 'Pending'), ('accepted', 'Accepted'), ('declined', 'Declined')], default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
 
 ''' DEFINE THE CONNECTION BETWEEN USERS '''
@@ -98,7 +97,7 @@ class ConnectionRequest(models.Model):
 class UserConnections(models.Model):
     firstuser = models.ForeignKey(User,on_delete=models.CASCADE, related_name='first_user',default=None)
     seconduser = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,related_name='second_user',default=None)
-    connection = models.CharField(default=None,blank=True,null=True)
+    connection = models.CharField(max_length=300, default=None,blank=True,null=True)
 
     def define_connection(self):
         if self.firstuser and self.seconduser:

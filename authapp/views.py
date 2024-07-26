@@ -128,8 +128,8 @@ def userProfile(request,username):
     ''' user connections part '''
 
     if logged_user != username:
-        user_requests_connections = ConnectionRequest.objects.filter(sender=logged_user, status='pending')
-    get_request_connections = ConnectionRequest.objects.filter(receiver=logged_user, status='pending')
+        user_requests_connections = ConnectionRequest.objects.filter(sender=logged_user)
+    get_request_connections = ConnectionRequest.objects.filter(receiver=logged_user)
 
     if get_request_connections.exists() and request.method == 'POST':
         action = request.POST.get("buttonrequest") 
