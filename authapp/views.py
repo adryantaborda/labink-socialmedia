@@ -44,10 +44,15 @@ def home(request):
 
     #View Posts
     posts = Post.objects.all()
+
+    # THIS IS IN TEST...
+    
+    # =------------------------
     
 
     return render(request,'home.html',{'search_page':search_page,'all_founds':all_founds,
-                                       'friends_list':friends_list,'posts':posts})      
+                                       'friends_list':friends_list,'posts':posts,
+                                       })      
 
 
 '''Login user with username and password'''
@@ -236,37 +241,37 @@ def cancelConnection(request,username):
 
 def createPost(request):
     user = request.user
-    form = PostForm(instance=user)
+    post_instance = None  # Assuming this is to create a new post, no initial instance
     
     if request.method == 'POST':
-        form = PostForm(request.POST,request.FILES,instance=user)
+        form = PostForm(request.POST, request.FILES)
 
+        print(f"request.FILES: {request.FILES}")
+        
         if form.is_valid():
             txt_content = form.cleaned_data.get('txt_content') 
             image = form.cleaned_data.get('image')
-
-            if txt_content == None and image == None:
-                messages.error(request,"You cannot create a blank post.")
             
+            if txt_content == None and image == None:
+                messages.error(request, "You cannot create a blank post.")
             else:
-                if request.FILES.get("image"):
-                    print(request.FILES.get("image"))
-                    try:
-                        image = request.FILES.get("image")
-                        post.image == image
-                    except Exception as e:
-                        print(e)
-
                 post = form.save(commit=False)
                 post.post_user = request.user
                 
+                if image:
+                    print(f"Image field populated: {image}")
+                    post.image = image
+                else:
+                    print("Image field is not populated.")
+
                 try:
                     post.save()
                     return redirect('home')
                 except Exception as e:
-                    messages.error(request,"Could not create post. Please try again.")
+                    messages.error(request, f"Could not create post. Please try again. Error: {e}")
         else:
-            messages.error(request,"Incorrect informations. Please try again.")
-    return render(request,'postcreator.html',{'form':form})
-
-                
+            messages.error(request, "Incorrect information. Please try again.")
+    else:
+        form = PostForm(instance=post_instance)
+    
+    return render(request, 'postcreator.html', {'form': form})

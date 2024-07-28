@@ -1,0 +1,16 @@
+{% block content %}
+<h1>{{ user.username }}</h1>
+<ul>
+    <div>
+        {% if user_posts.txt_content != None %}
+            {{user_posts.txt_content}}
+        {% else %}
+        {% endif %}
+        {% if user_posts.image %}
+        <div><img  src="{{ user_posts.image.url }}"></div>
+        {% endif %}
+    </div>
+    
+</ul>
+
+{% endblock content %}

@@ -76,13 +76,20 @@
 {% for post in posts %}
 
     <div>
-        {{post.user}}
-        {{post.txt_content}}
+        {{post.post_user}}
+        <form action="{% url 'postview' username=post.post_user id=post.id %}">
+            <button>See post</button>
+        </form>
+        {% if post.txt_content != None %}
+            {{post.txt_content}}
+        {% else %}
+        {% endif %}
         {% if post.image %}
-        {{post.image}}
+        <div><img  src="{{ post.image.url }}"></div>
         {% endif %}
     </div>
 {% endfor %}
+
 
 {% endif %}
 

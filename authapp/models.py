@@ -19,12 +19,8 @@ def user_directory_path(instance,filename):
     return profile_pic_name
 
 def user_directory_for_posts_image_path(instance,filename):
-    post_image_name = f'user_{instance.id}/posts_image/'
-    full_path = os.path.join(settings.MEDIA_ROOT, post_image_name)
+    post_image_name = f'user_{instance.post_user.id}/posts_image/{filename}'
     
-    if os.path.exists(full_path):
-        os.remove(full_path)
-
     return post_image_name
 
 ''' USER MODEL '''
@@ -57,6 +53,8 @@ class User(AbstractUser):
     
     attractedTo = models.CharField(max_length=6,choices=AttractedToGenders.choices,default=None,null=True,blank=True)
 
+    #Post relationship
+
     #DEFINE YEAR, MONTH AND DAY AND SET YOUR BIRTHDAY 
 
     def set_birthday_clean(self,year,month,day):
@@ -70,9 +68,9 @@ class User(AbstractUser):
         age = date.today() - self.birthday
         age = round(age.days / 365.25)
         return age
+    
     def save(self, *args, **kwargs):
         if not self.profile_picture and not self.pk:
-            print('here')
             self.profile_picture == 'media/user_default/pfpdefault.png'
   
         super().save(*args, **kwargs)  # Save instance first to ensure self.profile_picture has a path
