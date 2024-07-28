@@ -1,18 +1,70 @@
-{% load static%}
-{% include 'messages.html' %}
+{% extends 'main.html' %}
+
+{% load static %}
 
 {% block content %}
 
 <style>
-    .image-class {
-    width: 200px; /* Set the width */
-    height: auto; /* Maintain aspect ratio */
+    .connection {
+        color: rgb(46, 219, 3);
+    }
+
+    .twopeopleicon {
+        width: 23px;
+        height: 23px;
+    }
+    
+
+    .parent-element-connection {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
 }
+
 </style>
+
+{% if search_page %}
+
+{% if all_founds %}
+
+{% for userfound in all_founds %}
+{% if userfound.username != user.username %}
+
+<label for="">
+    
+    {% if userfound.username in friends_list %} 
+    
+    <div class="parent-element-connection">
+        <div><img class="pic_onsearch" src="{{ userfound.profile_picture.url }}"></div>
+        <p class="connection">{{userfound.name }} -- @{{userfound.username}}</p>
+        <img class="twopeopleicon" src="{% static 'labinkmedia/2plpicon.png'%}">
+    </div>
+    {% else %}
+    <div class="parent-element-connection">
+        <div><img class="pic_onsearch" src="{{ userfound.profile_picture.url }}"></div>
+        <p>{{userfound.name }} -- @{{userfound.username}}</p>
+          
+    </div>
+
+    {% endif %}
+    <form action="{% url 'profile' userfound.username %}">
+        <button>Check profile</button>
+    </form>
+</label>
+{% else %}
+
+{% endif %}
+
+{% endfor %}
+
+{% endif %}
+
+{% else %}
 
 <div><img class="image-class" src="{{ user.profile_picture.url }}"></div>
 
-<h1>Hello {{user.first_name }} {{user.last_name}}</h1>
+<h1>Hello {{user.name}}</h1>
 
 <h3>@{{ user.username }}</h3>
 
@@ -20,5 +72,20 @@
 <div></div>
 
 <a href="{% url 'logout'%}">LOGOUT</a>
+
+{% for post in posts %}
+
+    <div>
+        {{post.user}}
+        {{post.txt_content}}
+        {% if post.image %}
+        {{post.image}}
+        {% endif %}
+    </div>
+{% endfor %}
+
+{% endif %}
+
+
 
 {% endblock content %}

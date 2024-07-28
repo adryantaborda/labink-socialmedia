@@ -1,0 +1,27 @@
+{%block content %}
+
+
+<div>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        
+        
+        <div>
+            {{ form.txt_content.label_tag }}
+            {{ form.txt_content }}
+            {{ form.txt_content.errors }}
+        </div>
+        
+        <div>
+            {{ form.image.label_tag }}
+            {{ form.image }}
+            {{ form.image.errors }}
+        </div>
+        
+        <input type="submit" value="Register" />
+    </form>
+</div>
+
+
+{% endblock content %}

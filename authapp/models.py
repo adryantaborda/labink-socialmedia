@@ -8,6 +8,7 @@ import os
 
 ''' GET INSTANCE ID AND PATH FOR PROFILE PICTURE STORAGE'''
 
+
 def user_directory_path(instance,filename):
     profile_pic_name = f'user_{instance.id}/profile.jpg'
     full_path = os.path.join(settings.MEDIA_ROOT, profile_pic_name)
@@ -16,6 +17,15 @@ def user_directory_path(instance,filename):
         os.remove(full_path)
 
     return profile_pic_name
+
+def user_directory_for_posts_image_path(instance,filename):
+    post_image_name = f'user_{instance.id}/posts_image/'
+    full_path = os.path.join(settings.MEDIA_ROOT, post_image_name)
+    
+    if os.path.exists(full_path):
+        os.remove(full_path)
+
+    return post_image_name
 
 ''' USER MODEL '''
 
@@ -30,8 +40,8 @@ class User(AbstractUser):
         FEMALE = 'FEMALE'
         BOTH = 'BOTH'
 
-    ''' MAIN INFOS '''
-
+    #MAIN INFOS
+    name = models.CharField(max_length=40,null=True,blank=True)
     username = models.CharField(max_length=20,unique=True)
     bio = models.CharField(null=True, max_length=140,blank=True)
     profile_picture = models.ImageField(upload_to=user_directory_path,default='user_default/pfpdefault.png',blank=True,null=True)
@@ -43,11 +53,11 @@ class User(AbstractUser):
     birthday = models.DateField(null=True,blank=True)
 
 
-    ''' INFORMATIONS ABOUT THE USER RELATED TO SOCIAL LIFE '''
+    #INFORMATIONS ABOUT THE USER RELATED TO SOCIAL LIFE 
     
     attractedTo = models.CharField(max_length=6,choices=AttractedToGenders.choices,default=None,null=True,blank=True)
 
-    ''' DEFINE YEAR, MONTH AND DAY AND SET YOUR BIRTHDAY '''
+    #DEFINE YEAR, MONTH AND DAY AND SET YOUR BIRTHDAY 
 
     def set_birthday_clean(self,year,month,day):
         self.year = year
@@ -68,7 +78,6 @@ class User(AbstractUser):
         super().save(*args, **kwargs)  # Save instance first to ensure self.profile_picture has a path
 
         if self.profile_picture:
-
             try:
                 pic = Image.open(self.profile_picture.path)
                 pic = pic.resize((300, 300), Image.LANCZOS)
@@ -97,9 +106,15 @@ class ConnectionRequest(models.Model):
 class UserConnections(models.Model):
     firstuser = models.ForeignKey(User,on_delete=models.CASCADE, related_name='first_user',default=None)
     seconduser = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,related_name='second_user',default=None)
-    connection = models.CharField(max_length=300, default=None,blank=True,null=True)
+    connection = models.CharField(max_length=300,default=None,blank=True,null=True)
 
     def define_connection(self):
         if self.firstuser and self.seconduser:
             self.connection  = f"{self.firstuser.username}-{self.seconduser.username}"
-        
+
+''' USERS POSTS '''
+
+class Post(models.Model):
+    post_user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='post_creator',default=None,blank=True,null=True)
+    txt_content = models.CharField(max_length=5000,null=True,blank=True)
+    image = models.ImageField(upload_to=user_directory_for_posts_image_path,null=True,blank=True)

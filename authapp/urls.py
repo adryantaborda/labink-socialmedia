@@ -12,6 +12,7 @@ urlpatterns = [
     path('connecting/<str:username>',views.requestConnection, name="requestConnection"),
     path('cancel-connection-request/<str:username>',views.cancelConnectionRequest, name="cancelConnectionRequest"),
     path('disconnecting/<str:username>',views.cancelConnection,name='cancelConnection'),
-    path('connections/<str:username>',views.Connections,name='connections')
+    path('connections/<str:username>',views.Connections,name='connections'),
+    path('creating-post/',views.createPost,name='creatingPost')
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
