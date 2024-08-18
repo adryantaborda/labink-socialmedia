@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: ./app
+    volumes:
+      - ./app:/app
+      - ./app/staticfiles:/app/staticfiles  # Mount static files
+      - ./app/media:/app/media  # Mount media files
+    expose:
+      - "8000"
+    environment:
+      - DEBUG=True  # Set to False in production
+      - DJANGO_SETTINGS_MODULE=authdjango.settings  # Ensure this matches your settings module
+
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - web
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./app/staticfiles:/app/staticfiles 
+      - ./app/media:/app/media 
