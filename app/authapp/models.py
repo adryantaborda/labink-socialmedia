@@ -49,6 +49,7 @@ class User(AbstractUser):
     birthday = models.DateField(null=True,blank=True)
 
 
+
     #INFORMATIONS ABOUT THE USER RELATED TO SOCIAL LIFE 
     
     attractedTo = models.CharField(max_length=6,choices=AttractedToGenders.choices,default=None,null=True,blank=True)
@@ -75,6 +76,9 @@ class User(AbstractUser):
   
         super().save(*args, **kwargs)  # Save instance first to ensure self.profile_picture has a path
 
+        #Due to the following code being inside save function, it will always resize the image when changes 
+        #in the user profile are made. For this we have to mode this code to other separated function
+        #Code will stay like this for now.
         if self.profile_picture:
             try:
                 pic = Image.open(self.profile_picture.path)
@@ -113,6 +117,11 @@ class UserConnections(models.Model):
 ''' USERS POSTS '''
 
 class Post(models.Model):
-    post_user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='post_creator',default=None,blank=True,null=True)
+    post_user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='posts',default=None,blank=True,null=True)
     txt_content = models.CharField(max_length=5000,null=True,blank=True)
     image = models.ImageField(upload_to=user_directory_for_posts_image_path,null=True,blank=True)
+
+class PostMessage(models.Model):
+    message_text = models.CharField(max_length=400)
+    message_creator = models.ForeignKey(User,on_delete=models.CASCADE,related_name='messages',default=None,blank=True,null=True)
+    post_foreign_key = models.ForeignKey(Post,on_delete=models.CASCADE,related_name='messages',default=None,blank=True,null=True)

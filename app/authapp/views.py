@@ -5,8 +5,8 @@ from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 from django.urls import reverse
 from django.db.models import Q
-from .models import User, ConnectionRequest, UserConnections, Post
-from .forms import MyUserCreationForm, PostForm
+from .models import User, ConnectionRequest, UserConnections, Post, PostMessage
+from .forms import MyUserCreationForm, PostForm, PostMessageForm
 from .functions import check_strength, clean_username
 import requests
 import calendar
@@ -278,3 +278,23 @@ def createPost(request):
         form = PostForm(instance=post_instance)
     
     return render(request, 'postcreator.html', {'form': form})
+
+# def CreatePostMessage(request,postid):
+#     user = request.user
+#     post = Post.objects.filter(id=postid)
+#     form = PostMessage()
+#     if request.method == "POST":
+#         form = PostMessage(request.POST)
+#         if form.is_valid():
+#             try:
+#                 message_text = request.POST.get('message_text')
+#                 message = PostMessage.objects.create(message_creator=user,message_text=message_text,
+#                                                     post_foreign_key=post)
+#             except Exception as e:
+#                 print(e)
+
+#         else:
+#             messages.error(request, "Some error has occurred. Please try again.")
+
+#     return render(request, '.html', {'form': form, 'message':message})
+            

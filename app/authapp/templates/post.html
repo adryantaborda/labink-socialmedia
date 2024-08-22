@@ -1,4 +1,12 @@
 {% block content %}
+
+<style>
+    .image-post {
+        width: auto;
+        height: 400px
+    }
+
+</style>
 <h1>{{ user.username }}</h1>
 <ul>
     <div>
@@ -7,10 +15,18 @@
         {% else %}
         {% endif %}
         {% if user_posts.image %}
-        <div><img  src="{{ user_posts.image.url }}"></div>
+        <div><img class='image-post' src="{{ user_posts.image.url }}"></div>
         {% endif %}
     </div>
-    
 </ul>
+<h1>Comments</h1>
+        
+    
+    {% for message in messages %}
+    <div>
+        {{message.message_creator}}
+        {{message.message_text}}
+    </div>
+    {%endfor %}
 
 {% endblock content %}

@@ -10,6 +10,11 @@ body{
    
 }
 
+.image-post {
+  width: auto; /* Set the width */
+  height: 200px; /* Maintain aspect ratio */
+ 
+}
 button {
   display: inline-block;
   outline: 0;

@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import User, Post
+from .models import User, Post, PostMessage
 from django.contrib.auth.forms import UserCreationForm
 from django import forms   
 from datetime import date
@@ -22,3 +22,9 @@ class PostForm(ModelForm):
     class Meta:
         model = Post
         fields = ['post_user','txt_content','image']
+
+class PostMessageForm(ModelForm):
+    class Meta:
+        model = PostMessage
+        fields = ['message_text']
+        

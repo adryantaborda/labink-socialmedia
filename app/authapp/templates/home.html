@@ -20,7 +20,27 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+    }
+
+    .button-seepost {
+        
+        width: 20px;
+        height: 20px;
+        display: inline-block; 
+        justify-content: center;       /* Centers text horizontally */
+    align-items: center;      
+        line-height: 1.5;                 /* Ensures button behaves as an inline element */
+        padding: 10px 20px;              /* Padding around the text */
+        text-align: center;              /* Center-aligns the text horizontally */
+        vertical-align: middle;  
+        cursor: pointer;   
+
+    }
+
+    .button-seepost:focus {
+    outline: none;                   /* Removes the outline on focus */
 }
+
 
 </style>
 
@@ -77,16 +97,17 @@
 
     <div>
         {{post.post_user}}
-        <form action="{% url 'postview' username=post.post_user id=post.id %}">
-            <button>See post</button>
-        </form>
+        
         {% if post.txt_content != None %}
             {{post.txt_content}}
         {% else %}
         {% endif %}
         {% if post.image %}
-        <div><img  src="{{ post.image.url }}"></div>
+        <div><img class="image-post"  src="{{ post.image.url }}"></div>
         {% endif %}
+        <form action="{% url 'postview' username=post.post_user id=post.id %}">
+            <button class="button-seepost">See post</button>
+        </form>
     </div>
 {% endfor %}
 
