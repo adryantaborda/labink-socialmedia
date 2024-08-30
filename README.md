@@ -1,9 +1,3 @@
-# Labink. Your place is here...
-
-### WORK IN PROGRESS... (The code may be kinda messing... please, focus on the code :> )
-
-![Labink logo](https://github.com/adryantaborda/labink-socialmedia/assets/134542977/4782b976-d6d8-4301-9839-6bb6a0f78383)
-
 ## Some of the important technologies used in this project were!
 
 ![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
